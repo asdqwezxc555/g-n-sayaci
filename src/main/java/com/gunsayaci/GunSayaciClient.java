@@ -45,35 +45,35 @@ public class GunSayaciClient implements ClientModInitializer {
 		int hedefGun = Ayarlar.hedefGun;
 		long kalanTick = (long) hedefGun * 24000L - zamanToplam;
 
-		int genislik = 150;
-		int yukseklik = 56;
-		int x = client.getWindow().getScaledWidth() - genislik - 8;
-		int y = 8;
+		int genislik = 78;
+		int yukseklik = 28;
+		int x = client.getWindow().getScaledWidth() - genislik - 6;
+		int y = 6;
 
 		cerceveCiz(context, x, y, genislik, yukseklik);
 
-		String gunMetni = "Gün: " + mevcutGun + " / " + hedefGun;
-		String kalanMetni = kalanTick > 0 ? "Kalan: " + zamanFormatla(kalanTick) : "Hedef güne ulaşıldı!";
+		String gunMetni = "G:" + mevcutGun + "/" + hedefGun;
+		String kalanMetni = kalanTick > 0 ? zamanFormatla(kalanTick) : "Bitti!";
 
-		context.drawTextWithShadow(client.textRenderer, gunMetni, x + 10, y + 14, 0xFFF5DEB3);
-		context.drawTextWithShadow(client.textRenderer, kalanMetni, x + 10, y + 32, 0xFFF5DEB3);
+		context.drawTextWithShadow(client.textRenderer, gunMetni, x + 5, y + 6, 0xFFF5DEB3);
+		context.drawTextWithShadow(client.textRenderer, kalanMetni, x + 5, y + 16, 0xFFF5DEB3);
 	}
 
 	/** Vanilla dokusuna ihtiyaç duymadan, tamamen kod ile ahşap görünümlü bir çerçeve çizer. */
 	private void cerceveCiz(DrawContext context, int x, int y, int genislik, int yukseklik) {
 		context.fill(x, y, x + genislik, y + yukseklik, 0xFF3B2412);
-		context.fill(x + 3, y + 3, x + genislik - 3, y + yukseklik - 3, 0xFF8B5A2B);
+		context.fill(x + 2, y + 2, x + genislik - 2, y + yukseklik - 2, 0xFF8B5A2B);
 
-		for (int cizgiY = y + 3; cizgiY < y + yukseklik - 3; cizgiY += 6) {
-			context.fill(x + 3, cizgiY, x + genislik - 3, cizgiY + 1, 0x33000000);
+		for (int cizgiY = y + 2; cizgiY < y + yukseklik - 2; cizgiY += 5) {
+			context.fill(x + 2, cizgiY, x + genislik - 2, cizgiY + 1, 0x33000000);
 		}
 
-		context.fill(x + 3, y + 3, x + genislik - 3, y + 5, 0x40FFFFFF);
-		context.fill(x + 6, y + 6, x + genislik - 6, y + yukseklik - 6, 0x80000000);
+		context.fill(x + 2, y + 2, x + genislik - 2, y + 3, 0x40FFFFFF);
+		context.fill(x + 3, y + 3, x + genislik - 3, y + yukseklik - 3, 0x80000000);
 
 		int[][] kosler = {
-				{x + 5, y + 5}, {x + genislik - 7, y + 5},
-				{x + 5, y + yukseklik - 7}, {x + genislik - 7, y + yukseklik - 7}
+				{x + 2, y + 2}, {x + genislik - 4, y + 2},
+				{x + 2, y + yukseklik - 4}, {x + genislik - 4, y + yukseklik - 4}
 		};
 		for (int[] k : kosler) {
 			context.fill(k[0], k[1], k[0] + 2, k[1] + 2, 0xFF2A1808);
