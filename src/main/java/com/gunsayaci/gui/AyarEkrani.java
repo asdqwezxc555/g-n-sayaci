@@ -1,6 +1,7 @@
 package com.gunsayaci.gui;
 
 import com.gunsayaci.Ayarlar;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -38,8 +39,15 @@ public class AyarEkrani extends Screen {
 		try {
 			int deger = Integer.parseInt(alan.getText().trim());
 			if (deger < 0) deger = 0;
-			Ayarlar.kaydet(deger);
-			durum = Text.literal("§aKaydedildi!");
+
+			long mevcutMutlakGun = 0;
+			MinecraftClient client = MinecraftClient.getInstance();
+			if (client.world != null) {
+				mevcutMutlakGun = client.world.getTimeOfDay() / 24000L;
+			}
+
+			Ayarlar.kaydet(deger, mevcutMutlakGun);
+			durum = Text.literal("§aKaydedildi! Sayaç " + deger + "'dan geri saymaya başladı.");
 		} catch (NumberFormatException e) {
 			durum = Text.literal("§cLütfen geçerli bir tam sayı gir.");
 		}
@@ -50,7 +58,7 @@ public class AyarEkrani extends Screen {
 		super.render(context, mouseX, mouseY, delta);
 		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 30, 0xFFFFFF);
 		context.drawCenteredTextWithShadow(this.textRenderer,
-				Text.literal("Sayaç kaçıncı günde bitsin?"), this.width / 2, 55, 0xAAAAAA);
+				Text.literal("Sayaç kaç gün olarak başlasın?"), this.width / 2, 55, 0xAAAAAA);
 		context.drawCenteredTextWithShadow(this.textRenderer, durum, this.width / 2, 150, 0xFFFFFF);
 	}
 
