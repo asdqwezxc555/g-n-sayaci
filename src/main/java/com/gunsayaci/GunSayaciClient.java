@@ -40,23 +40,18 @@ public class GunSayaciClient implements ClientModInitializer {
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.world == null || client.options.hudHidden) return;
 
-		long zamanToplam = client.world.getTimeOfDay();
-		long mevcutGun = zamanToplam / 24000L;
 		int hedefGun = Ayarlar.hedefGun;
-		long kalanTick = (long) hedefGun * 24000L - zamanToplam;
 
-		int genislik = 78;
-		int yukseklik = 28;
+		int genislik = 62;
+		int yukseklik = 20;
 		int x = client.getWindow().getScaledWidth() - genislik - 6;
 		int y = 6;
 
 		cerceveCiz(context, x, y, genislik, yukseklik);
 
-		String gunMetni = "G:" + mevcutGun + "/" + hedefGun;
-		String kalanMetni = kalanTick > 0 ? zamanFormatla(kalanTick) : "Bitti!";
+		String gunMetni = "Gün: " + hedefGun;
 
 		context.drawTextWithShadow(client.textRenderer, gunMetni, x + 5, y + 6, 0xFFF5DEB3);
-		context.drawTextWithShadow(client.textRenderer, kalanMetni, x + 5, y + 16, 0xFFF5DEB3);
 	}
 
 	/** Vanilla dokusuna ihtiyaç duymadan, tamamen kod ile ahşap görünümlü bir çerçeve çizer. */
@@ -78,16 +73,5 @@ public class GunSayaciClient implements ClientModInitializer {
 		for (int[] k : kosler) {
 			context.fill(k[0], k[1], k[0] + 2, k[1] + 2, 0xFF2A1808);
 		}
-	}
-
-	private String zamanFormatla(long ticks) {
-		long saniyeToplam = ticks / 20L;
-		long saat = saniyeToplam / 3600L;
-		long dakika = (saniyeToplam % 3600L) / 60L;
-		long saniye = saniyeToplam % 60L;
-		if (saat > 0) {
-			return String.format("%d:%02d:%02d", saat, dakika, saniye);
-		}
-		return String.format("%d:%02d", dakika, saniye);
 	}
 }
