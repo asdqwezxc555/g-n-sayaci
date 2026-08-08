@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "gunsayaci",
+	"version": "${version}",
+	"name": "Gün Sayacı",
+	"description": "Ekranın sağ üst köşesinde ahşap çerçeveli, kaçıncı günde olduğunu ve belirlediğin bitiş gününe ne kadar kaldığını gösteren bir gösterge.",
+	"authors": ["Claude ile birlikte"],
+	"contact": {},
+	"license": "MIT",
+	"icon": "",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["com.gunsayaci.GunSayaciClient"]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.15.0",
+		"fabric-api": "*",
+		"minecraft": "1.20.1",
+		"java": ">=17"
+	}
+}
