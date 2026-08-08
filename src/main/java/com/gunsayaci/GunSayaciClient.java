@@ -40,7 +40,10 @@ public class GunSayaciClient implements ClientModInitializer {
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.world == null || client.options.hudHidden) return;
 
-		int hedefGun = Ayarlar.hedefGun;
+		long mevcutMutlakGun = client.world.getTimeOfDay() / 24000L;
+		long gecenGun = mevcutMutlakGun - Ayarlar.baslangicGun;
+		long kalanGun = Ayarlar.hedefGun - gecenGun;
+		if (kalanGun < 0) kalanGun = 0;
 
 		int genislik = 62;
 		int yukseklik = 20;
@@ -49,7 +52,7 @@ public class GunSayaciClient implements ClientModInitializer {
 
 		cerceveCiz(context, x, y, genislik, yukseklik);
 
-		String gunMetni = "Gün: " + hedefGun;
+		String gunMetni = "Gün: " + kalanGun;
 
 		context.drawTextWithShadow(client.textRenderer, gunMetni, x + 5, y + 6, 0xFFF5DEB3);
 	}
