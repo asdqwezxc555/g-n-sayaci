@@ -12,13 +12,16 @@ import java.util.List;
  * Sayaç ayarlarını basit bir metin dosyasında saklar (.minecraft/config/gunsayaci.txt).
  * Sunucuya, dünya kaydına veya ağa ihtiyaç duymaz; tamamen istemci tarafında çalışır.
  *
- * hedefGun: kullanıcının girdiği ve sayacın başlayacağı sayı (ör. 100).
- * baslangicGun: kaydedildiği andaki oyun içi mutlak gün sayısı; geri sayım
- * bu güne göre hesaplanır (kalanGun = hedefGun - (mevcutGun - baslangicGun)).
+ * hedefGun: kullanıcının girdiği sayı.
+ * baslangicGun: kaydedildiği andaki oyun içi mutlak gün sayısı; hesaplama bu güne göre yapılır.
+ * gostergeGoster: gösterge ekranda görünsün mü?
+ * geriSayimMi: true ise hedefGun'dan aşağı sayar, false ise hedefGun'dan yukarı sayar.
  */
 public class Ayarlar {
 	public static int hedefGun = 100;
 	public static long baslangicGun = 0;
+	public static boolean gostergeGoster = true;
+	public static boolean geriSayimMi = true;
 
 	private static Path dosyaYolu() {
 		return FabricLoader.getInstance().getConfigDir().resolve("gunsayaci.txt");
@@ -29,22 +32,39 @@ public class Ayarlar {
 			Path yol = dosyaYolu();
 			if (Files.exists(yol)) {
 				List<String> satirlar = Files.readAllLines(yol, StandardCharsets.UTF_8);
-				if (!satirlar.isEmpty()) hedefGun = Integer.parseInt(satirlar.get(0).trim());
+				if (satirlar.size() > 0) hedefGun = Integer.parseInt(satirlar.get(0).trim());
 				if (satirlar.size() > 1) baslangicGun = Long.parseLong(satirlar.get(1).trim());
+				if (satirlar.size() > 2) gostergeGoster = satirlar.get(2).trim().equals("1");
+				if (satirlar.size() > 3) geriSayimMi = satirlar.get(3).trim().equals("1");
 			}
 		} catch (Exception e) {
 			hedefGun = 100;
 			baslangicGun = 0;
+			gostergeGoster = true;
+			geriSayimMi = true;
 		}
 	}
 
-	public static void kaydet(int yeniHedef, long mevcutMutlakGun) {
-		hedefGun = yeniHedef;
-		baslangicGun = mevcutMutlakGun;
+	private static void diskeYaz() {
 		try {
-			Files.writeString(dosyaYolu(), yeniHedef + "\n" + mevcutMutlakGun, StandardCharsets.UTF_8);
+			String icerik = hedefGun + "\n" + baslangicGun + "\n"
+					+ (gostergeGoster ? "1" : "0") + "\n"
+					+ (geriSayimMi ? "1" : "0");
+			Files.writeString(dosyaYolu(), icerik, StandardCharsets.UTF_8);
 		} catch (IOException ignored) {
 			// Kaydedilemezse bile mevcut oturumda bellekteki deger kullanilmaya devam eder.
 		}
+	}
+
+	public static void kaydet(int yeniHedef, long mevcutMutlakGun, boolean yeniGeriSayimMi) {
+		hedefGun = yeniHedef;
+		baslangicGun = mevcutMutlakGun;
+		geriSayimMi = yeniGeriSayimMi;
+		diskeYaz();
+	}
+
+	public static void gostergeyiDegistir() {
+		gostergeGoster = !gostergeGoster;
+		diskeYaz();
 	}
 }
